@@ -51,9 +51,30 @@ graph TD
 ### 📋 Prerequisites
 - Python 3.9+
 - Node.js 18+
-- [Ollama](https://ollama.com/) (for AI feedback)
+- [Ollama](https://ollama.com/) (Required for AI feedback)
+- **Poppler** (Required for PDF processing)
 
-### 1. Backend Setup
+### 1. External Dependencies Setup
+
+#### 🤖 Ollama (Local LLM)
+1. **Install**: Download and install from [ollama.com](https://ollama.com/).
+2. **Start Service**: Ensure the Ollama application is running in your system tray.
+3. **Pull Model**: Open your terminal and run:
+   ```bash
+   ollama pull llama3.2
+   ```
+
+#### 📄 Poppler (PDF Support)
+1. **Windows**: 
+   - Download the latest binary from [Github (OSGeo)](https://github.com/oschwartz10612/poppler-windows/releases/).
+   - Extract the folder (e.g., to `C:\poppler`).
+   - Add the `bin/` directory to your system **Environment Variables (PATH)**.
+2. **Mac**: `brew install poppler`
+3. **Linux**: `sudo apt install poppler-utils`
+
+---
+
+### 2. Backend Setup
 ```bash
 cd backend
 python -m venv .venv
@@ -66,18 +87,15 @@ pip install -r requirements.txt
 uvicorn app:app --reload
 ```
 
-### 2. Frontend Setup
+### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
 npm start
 ```
 
-### 3. Model Preparation
-On first run, the system will download the required Transformer models. Ensure you have an active internet connection. To enable AI feedback, run:
-```bash
-ollama run llama3.2
-```
+### 4. Model Preparation
+On first run, the system will download TrOCR and SBERT models (requires internet). Ensure Ollama is running (`ollama run llama3.2`) to enable the evaluation feedback.
 
 ---
 
