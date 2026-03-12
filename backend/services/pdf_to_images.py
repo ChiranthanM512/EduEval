@@ -1,0 +1,33 @@
+import os
+import fitz  # PyMuPDF
+import uuid
+
+def pdf_to_images(pdf_path: str, out_dir="uploads/pdf_pages"):
+    """
+    Converts PDF pages into PNG images using PyMuPDF (fast, no poppler dependency).
+    """
+    os.makedirs(out_dir, exist_ok=True)
+
+    doc = fitz.open(pdf_path)
+    image_paths = []
+    
+    unique_id = str(uuid.uuid4())[:8]
+    base_name = os.path.splitext(os.path.basename(pdf_path))[0]
+    
+    zoom = 300 / 72  # 300 DPI
+    mat = fitz.Matrix(zoom, zoom)
+
+    for page_num in range(len(doc)):
+        page = doc[page_num]
+        pix = page.get_pixmap(matrix=mat, alpha=False)
+        
+        img_path = os.path.join(
+            out_dir, 
+            f"{base_name}_{unique_id}_page_{page_num+1}.png"
+        )
+        
+        pix.save(img_path)
+        image_paths.append(img_path)
+
+    doc.close()
+    return image_paths

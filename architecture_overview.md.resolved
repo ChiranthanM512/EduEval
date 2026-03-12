@@ -1,0 +1,69 @@
+# EduEvalve Project Architecture
+
+EduEvalve is a free, open-source, and local-first AI exam evaluation system. It is designed to match commercial OCR accuracy (like Gemini) while running entirely on your local machine.
+
+---
+
+## 🏗️ High-Level System Design
+
+```mermaid
+graph TD
+    User([Handwritten Answer Sheet]) --> UI[React Frontend]
+    UI --> API[FastAPI Backend]
+    
+    subgraph "The 5-Stage Evaluation Pipeline"
+        API --> S1[Stage 1: Image Preprocessing]
+        S1 --> S2[Stage 2: Hybrid OCR Extraction]
+        S2 --> S3[Stage 3: Vocabulary-Guided Correction]
+        S3 --> S4[Stage 4: Semantic Scoring]
+        S4 --> S5[Stage 5: Local AI Feedback]
+    end
+    
+    API <--> DB[(SQLite Database)]
+    S5 --> UI
+```
+
+---
+
+## 🛠️ Module & Library Breakdown
+
+### 1. Hybrid OCR Extraction
+**Goal:** Extract text from handwritten images with high accuracy.
+- **`microsoft/trocr-base-handwritten`**: The primary model for English. It is a Vision-Encoder-Decoder model that reads handwritten strokes sequentially.
+- **`EasyOCR`**: Used for DetectING text boxes (grouping words into lines) and as the primary engine for **Hindi** and other Indic languages.
+- **`OpenCV`**: Handles image cropping, rotation correction, and resizing.
+
+### 2. OCR Text Refinement (The "Gemini Replacement")
+**Goal:** Correct OCR errors (e.g., "peacock" → "deadlock") without an internet connection.
+- **`pyspellchecker`**: Fast, offline correction of simple letter-substitution typos.
+- **`rapidfuzz`**: **Core Component.** It compares OCR words against words available in the *Model Answer*. Using character-level similarity (Levenshtein), it replaces garbled OCR text with the most likely correct word from the answer key.
+- **`Ollama (Llama 3.2)`**: Used for final semantic cleanup of Hindi text and as a language-aware fallback.
+
+### 3. Semantic Scoring
+**Goal:** Grade the answer based on meaning, not just exact word overlap.
+- **`sentence-transformers (SBERT)`**: Uses the `paraphrase-multilingual-MiniLM-L12-v2` model.
+- **`PyTorch`**: Runs the mathematical tensors for cosine similarity calculation.
+- **Logic**: It calculates the "Vector Distance" between the concept of the student's answer and the model answer. This allows it to grade correctly even if the student uses different synonyms.
+
+### 4. Explainable AI & Feedback
+**Goal:** Tell the student why they got a specific score and what they missed.
+- **`Ollama`**: Runs locally to generate human-readable feedback.
+- **`BART / T5-Small`**: Highly optimized local models for extracting "Missing Keywords" quickly on CPUs.
+
+### 5. Frontend & API
+- **`React / Vite`**: Modern, fast UI for document uploads and result visualization.
+- **`FastAPI`**: High-performance Python web server with asynchronous handling of heavy AI tasks.
+- **`SQLAlchemy`**: ORM for managing student results and exam history in **SQLite**.
+
+---
+
+## 📂 Key File Structure
+
+| Path | Purpose |
+| :--- | :--- |
+| [backend/app.py](file:///c:/Users/chira/Downloads/EduEvalve-main%20%283%29/EduEvalve-main/backend/app.py) | Main entry point for the API. |
+| [backend/services/hybrid_ocr.py](file:///c:/Users/chira/Downloads/EduEvalve-main%20%283%29/EduEvalve-main/backend/services/hybrid_ocr.py) | The logic that switches between TrOCR and EasyOCR. |
+| [backend/services/explainability.py](file:///c:/Users/chira/Downloads/EduEvalve-main%20%283%29/EduEvalve-main/backend/services/explainability.py) | The multi-pass OCR correction and AI feedback logic. |
+| [backend/services/scoring.py](file:///c:/Users/chira/Downloads/EduEvalve-main%20%283%29/EduEvalve-main/backend/services/scoring.py) | SBERT similarity and grade calculation math. |
+| [backend/services/text_cleaner.py](file:///c:/Users/chira/Downloads/EduEvalve-main%20%283%29/EduEvalve-main/backend/services/text_cleaner.py) | Specialized cleanup for Hindi matras and symbols. |
+| [backend/matrix_evaluation.py](file:///c:/Users/chira/Downloads/EduEvalve-main%20%283%29/EduEvalve-main/backend/matrix_evaluation.py) | Terminal-based testing tool for prediction accuracy. |
