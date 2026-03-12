@@ -1,21 +1,19 @@
-# 🎓 EduEvalve
+# 🎓 EduEval: AI-Powered Exam Evaluation System
 
-**EduEvalve** is a free, open-source, and local-first AI exam evaluation system. It leverages cutting-edge AI models for OCR, semantic scoring, and automated feedback, all running entirely on your local hardware to ensure privacy and cost-efficiency.
+**EduEval** (formerly EduEvalve) is a free, open-source, and **local-first** AI evaluation platform. It automates the grading of handwritten answer sheets using a hybrid OCR pipeline, semantic similarity scoring, and AI-generated feedback—all running entirely on your local hardware for 100% privacy and zero API costs.
 
 ---
 
-## 🏗️ Project Architecture & System Design
+## 🏗️ System Architecture
 
-EduEvalve follows a modular 5-stage evaluation pipeline to ensure high accuracy and explainability.
-
-### 🔄 The 5-Stage Evaluation Pipeline
+EduEval follows a modular **5-Stage Evaluation Pipeline** to ensure accuracy even with imperfect handwriting.
 
 ```mermaid
 graph TD
     User([Handwritten Answer Sheet]) --> UI[React Frontend]
     UI --> API[FastAPI Backend]
     
-    subgraph "Evaluation Intelligence"
+    subgraph "Evaluation Intelligence (Local)"
         API --> S1[Stage 1: Image Preprocessing]
         S1 --> S2[Stage 2: Hybrid OCR Extraction]
         S2 --> S3[Stage 3: Vocabulary-Guided Correction]
@@ -27,44 +25,77 @@ graph TD
     S5 --> UI
 ```
 
-### 🛠️ Key Technology Stack
+### 🧠 The Intelligence Layer
 
-- **Hybrid OCR Engine**: Uses **TrOCR** (English handwriting) and **EasyOCR** (Indic languages & layout detection).
-- **OCR Refinement**: Custom vocabulary-guided correction using **RapidFuzz** and **PySpellChecker** to match Gemini-level accuracy without APIs.
-- **Semantic Scoring**: **SBERT** (Sentence-Transformers) for grading based on the meaning of the answer.
-- **Local AI Agency**: **Ollama (Llama 3.2)** for generating human-like feedback and detailed explanations.
-- **Frontend**: **React** with Vite for a responsive, modern interface.
-- **Backend**: **FastAPI** with **SQLAlchemy** (SQLite).
+1.  **Hybrid OCR**: Combines **TrOCR** (English handwriting) and **EasyOCR** (Indic languages & layout) for superior text extraction.
+2.  **Vocabulary-Guided Correction**: Replaces garbled OCR text with likely correct terms from the *Model Answer* using **RapidFuzz** (Levenshtein distance).
+3.  **Semantic Scoring**: Uses **SBERT** (`sentence-transformers`) to grade answers based on meaning and context, rather than just exact word matches.
+4.  **Local AI Feedback**: Integrates **Ollama (Llama 3.2)** and **T5-Small** to generate detailed performance explanations and identify missing keywords.
+
+---
+
+## 🛠️ Technology Stack
+
+-   **Frontend**: React, Vite, Framer Motion (for animations).
+-   **Backend**: FastAPI, SQLAlchemy (SQLite).
+-   **AI Infrastructure**: 
+    -   OCR: `microsoft/trocr-base-handwritten`, `EasyOCR`.
+    -   NLP: `sentence-transformers` (paraphrase-multilingual-MiniLM-L12-v2).
+    -   LLM: `Ollama` (Llama 3.2).
+-   **Libraries**: OpenCV, RapidFuzz, PySpellChecker, PyMuPDF.
+
+---
+
+## 🚀 Quick Start
+
+### 📋 Prerequisites
+- Python 3.9+
+- Node.js 18+
+- [Ollama](https://ollama.com/) (for AI feedback)
+
+### 1. Backend Setup
+```bash
+cd backend
+python -m venv .venv
+# Windows
+.\.venv\Scripts\activate
+# Linux/Mac
+source .venv/bin/activate
+
+pip install -r requirements.txt
+uvicorn app:app --reload
+```
+
+### 2. Frontend Setup
+```bash
+cd frontend
+npm install
+npm start
+```
+
+### 3. Model Preparation
+On first run, the system will download the required Transformer models. Ensure you have an active internet connection. To enable AI feedback, run:
+```bash
+ollama run llama3.2
+```
 
 ---
 
 ## 📂 Project Structure
 
-| Directory | Purpose |
-| :--- | :--- |
-| `backend/` | FastAPI server, AI model integration, and database services. |
-| `frontend/` | React single-page application for the user interface. |
-| `backend/services/` | Core business logic (OCR, scoring, feedback generation). |
-| `backend/database/` | Database schema and SQLite persistence. |
-
----
-
-## 🚀 Getting Started
-
-Detailed instructions for setting up the backend and frontend are available in:
-👉 **[setup_instructions.md](./setup_instructions.md)**
-
----
-
-## 📊 Evaluation Tools
-
-For developers, a terminal-based evaluation tool is included to test model accuracy:
-```powershell
-# From the backend directory
-python matrix_evaluation.py
+```text
+EduEval/
+├── backend/            # FastAPI Server & AI Services
+│   ├── routers/        # API Endpoints (Auth, Eval, Results)
+│   ├── services/       # OCR, Scoring, and Feedback Logic
+│   └── models.py       # DB Schema (SQLAlchemy)
+├── frontend/           # React Application
+│   └── src/components/ # UI Modules (Upload, Results, Navbar)
+├── architecture.png    # High-level design diagram
+└── setup_instructions.md # Detailed installation guide
 ```
 
 ---
 
 ## ⚖️ License
-Open source and free for educational use.
+This project is open-source and free for educational use. 
