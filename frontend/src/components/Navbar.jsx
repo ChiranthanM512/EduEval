@@ -43,7 +43,7 @@ export default function Navbar({ setLogged, page, setPage }) {
       >
         <motion.img
           src={logo}
-          alt="EduEvalve Logo"
+          alt="EduEval Logo"
           style={{
             width: "34px",
             height: "34px",

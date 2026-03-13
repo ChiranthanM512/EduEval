@@ -70,7 +70,7 @@ export default function Login({ setLogged }) {
           >
             <motion.img
               src={logo}
-              alt="EduEvalve Logo"
+              alt="EduEval Logo"
               style={styles.logo}
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}

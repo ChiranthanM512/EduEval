@@ -6,8 +6,8 @@ from sentence_transformers import SentenceTransformer, util
 print("Loading SBERT Scoring model...")
 embedder = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
-# Similarity below this means answer is fundamentally unrelated
-NOT_RELATED_THRESHOLD = 0.22
+# Similarity below this means answer is fundamentally unrelated or too noisy
+NOT_RELATED_THRESHOLD = 0.30
 
 
 def semantic_score(student_text: str, model_text: str) -> dict:
@@ -28,18 +28,17 @@ def semantic_score(student_text: str, model_text: str) -> dict:
     if sim < NOT_RELATED_THRESHOLD:
         return {"score": 0.0, "similarity": round(sim, 4), "length_ratio": 0.0}
 
-    # 2. Boost: map similarity to a more intuitive educational grade range.
-    # SBERT cosine similarity of 0.65+ semantically means the student knows the concept.
-    # We map 0.22 -> 20 and 1.0 -> 100 with a power curve that rewards higher similarity.
-    # Using: score = 20 + 80 * ((sim - 0.22) / (1.0 - 0.22)) ^ 0.7
+    # 2. Map similarity to a score.
+    # We map NOT_RELATED_THRESHOLD (0.30) -> 0 and 1.0 -> 100.
+    # Using a square-root curve (0.5 power) to reward partial knowledge fairly.
     normalized = (sim - NOT_RELATED_THRESHOLD) / (1.0 - NOT_RELATED_THRESHOLD)
-    boosted_score = 20.0 + 80.0 * (normalized ** 0.7)
+    boosted_score = 100.0 * (normalized ** 0.5)
 
-    # 3. Length Adjustment (mild penalty if answer is very short, no penalty if long)
+    # 3. Length Adjustment (very mild penalty for short answers)
     length_ratio = float(len(student_text) / max(len(model_text), 1))
     length_ratio = min(length_ratio, 1.0)
     
-    final_score = boosted_score * (0.85 + 0.15 * length_ratio)
+    final_score = boosted_score * (0.95 + 0.05 * length_ratio)
 
     return {
         "score": round(float(max(0.0, min(final_score, 100.0))), 2),

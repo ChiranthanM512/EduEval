@@ -15,7 +15,7 @@ from routers.model_answers import router as model_answers_router
 # Create DB tables
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="EduEvalve API")
+app = FastAPI(title="EduEval API")
 
 # CORS (React)
 app.add_middleware(
@@ -35,4 +35,4 @@ app.include_router(results_router)
 
 @app.get("/")
 def root():
-    return {"message": "EduEvalve backend is running"}
+    return {"message": "EduEval backend is running"}

@@ -83,7 +83,7 @@ def _vocabulary_guided_correction(ocr_text: str, model_text: str) -> str:
             result = process.extractOne(
                 stripped, hi_vocab,
                 scorer=fuzz.ratio,
-                score_cutoff=65  # slightly higher for Hindi — words are shorter
+                score_cutoff=65  # lower cutoff to allow better correction of Indic script
             )
         else:
             # English word
@@ -94,7 +94,7 @@ def _vocabulary_guided_correction(ocr_text: str, model_text: str) -> str:
             result = process.extractOne(
                 lower, en_vocab,
                 scorer=fuzz.ratio,
-                score_cutoff=60
+                score_cutoff=60  # Allows correcting 'peckhok' -> 'deadlock'
             )
 
         if result:
@@ -228,20 +228,25 @@ def _correct_via_ollama(ocr_text: str, model_text: str = "", lang_hint: str = "e
 
 def explain_answer(student_text: str, model_text: str) -> dict:
     """Generate structured explanation using local Ollama."""
-    prompt = f"""Compare the student answer with the model answer and explain the evaluation.
+    prompt = f"""Compare the student answer with the model answer and provide a strict technical evaluation.
+    
+    CRITICAL RULES:
+    1. Do NOT hallucinate. If the student text is garbled, unreadable, or logically broken, HONESTLY state that the text is unintelligible.
+    2. Do NOT credit concepts if the text only contains similar-sounding random words (e.g., 'peacock' vs 'deadlock').
+    3. If the answer is off-topic, clearly state it is unrelated.
 
-MODEL ANSWER:
-{model_text}
+    MODEL ANSWER (The Truth):
+    {model_text}
 
-STUDENT ANSWER:
-{student_text}
+    STUDENT ANSWER (Extracted OCR):
+    {student_text}
 
-Explain:
-1. What the student answered correctly
-2. What important points are missing
-3. Suggestions to improve the answer
+    Explain:
+    1. What the student answered correctly (Only if explicitly clear)
+    2. What important points are missing or broken
+    3. Suggestions to improve the answer (If garbled, suggest clearer handwriting)
 
-Provide the response in clear Markdown."""
+    Provide the response in clear, objective Markdown."""
 
     try:
         response = requests.post(

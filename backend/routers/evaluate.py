@@ -62,7 +62,12 @@ def evaluate(req: EvaluateRequest, db: Session = Depends(get_db)):
     matched = matched_keywords(extracted_text, model_ans.model_text)
 
     # 6️⃣ Explainable AI (using local Ollama)
-    explainable_ai = explain_answer(extracted_text, model_ans.model_text)
+    if score > 0:
+        explainable_ai = explain_answer(extracted_text, model_ans.model_text)
+    else:
+        explainable_ai = {
+            "explanation": "### Evaluation Result: Zero Marks\n\nThe submitted answer is not related to the expected model answer or topic. No marks have been assigned."
+        }
 
     # Merge similarity and length ratio for frontend display
     explainable_ai["similarity"] = scoring_result["similarity"]

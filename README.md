@@ -32,6 +32,21 @@ graph TD
 3.  **Semantic Scoring**: Uses **SBERT** (`sentence-transformers`) to grade answers based on meaning and context, rather than just exact word matches.
 4.  **Local AI Feedback**: Integrates **Ollama (Llama 3.2)** and **T5-Small** to generate detailed performance explanations and identify missing keywords.
 
+## 📊 Research & Performance Metrics
+
+EduEval includes a dedicated benchmarking tool for academic and conference reporting.
+
+### Run Metrics Generator
+To generate quantitative metrics (CER, WER, SBERT Similarity, MAE, etc.) for research papers:
+```powershell
+python backend/generate_metrics.py
+```
+
+### Key Metrics Covered
+- **OCR Accuracy**: Character Error Rate (CER) and Word Error Rate (WER).
+- **Evaluation Accuracy**: Mean Absolute Error (MAE) and Pearson Correlation.
+- **Latency**: Real-time benchmarking of AI inference and end-to-end processing.
+
 ---
 
 ## 🛠️ Technology Stack

@@ -1,4 +1,4 @@
-# EduEvalve Backend — Developer Setup
+# EduEval Backend — Developer Setup
 
 1. Create and activate a Python virtual environment (Windows Powershell):
 
@@ -19,6 +19,13 @@ pip install -r requirements.txt
 uvicorn app:app --reload --port 8000
 ```
 
-Notes:
+### 📑 Research Metrics & Benchmarking
+To generate quantitative data for conference papers (CER, WER, Pearson Correlation):
+```powershell
+python generate_metrics.py
+```
+This benchmarks the live system performance on your current hardware.
+
+## 📌 Notes
 - The project requires packages listed in `requirements.txt` (FastAPI, SQLAlchemy, transformers, paddleocr, torch, OpenCV, etc.).
 - If you only want to run basic API endpoints without heavy ML features, you can comment out or guard imports in `services/` that require large packages.

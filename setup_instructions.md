@@ -1,8 +1,8 @@
-# 📌 EduEvalve – Setup Instructions
+# 📌 EduEval – Setup Instructions
 
 ## 1️⃣ Project Overview
 
-EduEvalve is an AI-powered evaluation system that:
+EduEval is an AI-powered evaluation system that:
 
 - Accepts user input (PDF/Text/Image)
 - Processes responses using NLP/ML models
@@ -110,7 +110,7 @@ This project uses **SQLite** database.
 
 Database file:
 ```
-backend/eduevalve.db
+backend/edueval.db
 ```
 
 The database will be created automatically on first run if not present.
@@ -203,7 +203,7 @@ project-root/
 │   ├── config.py
 │   ├── database.py
 │   ├── db_migrate_add_explainable_ai.py
-│   ├── eduevalve.db
+│   ├── edueval.db
 │   ├── models.py
 │   ├── schema.py
 │   ├── utils.py
