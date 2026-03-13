@@ -33,8 +33,8 @@ This is the React-based frontend for the EduEval project, a handwritten text eva
 ## 🛠️ Key Features
 
 - **Multi-language Support**: Interface for evaluating English, Hindi, Tamil, Telugu, and more.
-- **AI Explanations**: Visual feedback and text-based explanations powered by Google Gemini.
-- **Advanced Semantic Analysis**: Real-time scoring using SBERT and Gemini logic refinement.
+- **AI Explanations**: Visual feedback and text-based explanations powered by local LLM (Ollama).
+- **Semantic scoring using SBERT embeddings**: Real-time scoring using SBERT.
 - **Handwritten Image Upload**: Support for JPG, PNG, and multi-page PDF documents.
 
 ## 📖 Available Scripts

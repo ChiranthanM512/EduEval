@@ -38,7 +38,7 @@ def evaluate(req: EvaluateRequest, db: Session = Depends(get_db)):
     # Clean raw OCR output (preserves non-English Unicode)
     extracted_text = clean_text(extracted_text)
 
-    # Refine OCR text using local Ollama with model-answer context (no Gemini)
+    # Refine OCR text using local Ollama with model-answer context
     lang_hint = hybrid_ocr.detect_dominant_language(model_ans.model_text)
     refined_text = refine_ocr_text(extracted_text, lang_hint=lang_hint, model_text=model_ans.model_text)
     if refined_text:
@@ -50,7 +50,7 @@ def evaluate(req: EvaluateRequest, db: Session = Depends(get_db)):
             detail="OCR failed: no readable text found"
         )
 
-    # 3️⃣ Semantic score (pure SBERT — no LLM influence)
+    # 3️⃣ Semantic score (pure SBERT)
     scoring_result = semantic_score(extracted_text, model_ans.model_text)
     score = scoring_result["score"]
 

@@ -1,6 +1,6 @@
 # 🎓 EduEval: AI-Powered Exam Evaluation System
 
-**EduEval** (formerly EduEvalve) is a free, open-source, and **local-first** AI evaluation platform. It automates the grading of handwritten answer sheets using a hybrid OCR pipeline, semantic similarity scoring, and AI-generated feedback—all running entirely on your local hardware for 100% privacy and zero API costs.
+**EduEval** is a free, open-source, and **local-first** AI evaluation platform. It automates the grading of handwritten answer sheets using a hybrid OCR pipeline, semantic similarity scoring, and AI-generated feedback—all running entirely on your local hardware for 100% privacy and zero API costs.
 
 ---
 
