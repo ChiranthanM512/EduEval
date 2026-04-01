@@ -1,0 +1,35 @@
+﻿Loading SBERT Scoring model...
+
+============================================================
+      EDU-EVAL REAL-TIME RESEARCH METRICS
+============================================================
+
+[1/3] Loading AI Pipeline...
+[2/3] Analyzing Accuracy from Golden Set...
+
+Quantitative Evaluation Metrics (Calculated Live):
+------------------------------------------------------------
+Module          | Metric                       | Value (Calculated)
+------------    | -------------------------    | ------------------
+OCR Logic       | Model Confidence (CER)       | 0.50 (50.2%)      
+OCR Logic       | Word Level Error (WER)       | 0.69 (31.5%)      
+                |                              |                   
+SBERT Scoring   | Mean Absolute Error (MAE)    | 8.40 pts          
+SBERT Scoring   | Pearson Correlation (r)      | 0.931             
+SBERT Scoring   | Inference Latency            | 0.026 sec         
+                |                              |                   
+Full System     | Grading Stability            | OPTIMAL           
+Full System     | Throughput Rating            | 22 sheets/min     
+------------------------------------------------------------
+
+[3/3] Research Baseline Comparison:
+Method              | Accuracy (Est) | Error (MAE)
+-------------------------------------------------------
+Keyword Matching    | 68%            | 1.45
+TF-IDF Vectors      | 74%            | 1.12
+EduEval (SBERT+Fuzz)| 86.6%          | 8.40  <-- ACTUAL
+-------------------------------------------------------
+
+[SUCCESS] Real-time metrics generated for research analysis.
+============================================================
+

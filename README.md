@@ -37,7 +37,7 @@ graph TD
 EduEval includes a dedicated benchmarking tool for academic and conference reporting.
 
 ### Run Metrics Generator
-To generate quantitative metrics (CER, WER, SBERT Similarity, MAE, etc.) for research papers:
+To generate quantitative metrics (CER, WER, SBERT Similarity, MAE, etc.) :
 ```powershell
 python backend/generate_metrics.py
 ```
