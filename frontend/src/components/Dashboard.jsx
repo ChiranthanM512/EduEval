@@ -10,7 +10,7 @@ import {
   CartesianGrid,
 } from "recharts";
 
-import eduImg from "../assets/image1.png";
+import eduImg from "../assets/image1.jpg";
 
 import api from "../api";
 import "../styles.css";

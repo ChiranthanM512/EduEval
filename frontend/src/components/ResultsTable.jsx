@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import API from "../api";
 import { motion, AnimatePresence } from "framer-motion";
-import eduImg from "../assets/image6.png";
+import eduImg from "../assets/image6.jpg";
 
 export default function ResultsTable() {
   const [rows, setRows] = useState([]);

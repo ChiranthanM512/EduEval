@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import API from "../api";
 import { motion } from "framer-motion";
-import eduImg from "../assets/image3.png";
+import eduImg from "../assets/image3.jpg";
 
 export default function UploadPage() {
   const [file, setFile] = useState(null);
